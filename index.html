@@ -109,7 +109,7 @@
             <div class="board-widget">
                 <h2 class="widget-title">Wetter</h2>
                 <div class="mb-4">
-                    <input type="text" id="cityInput" class="input-field" placeholder="Stadt eingeben (z.B. Dautphetal)">
+                    <input type="text" id="cityInput" class="input-field" placeholder="Stadt eingeben (z.B. Berlin)">
                     <button id="getWeatherBtn" class="button-primary w-full mt-2">Wetter abrufen</button>
                 </div>
                 <div id="weatherInfo" class="text-gray-700">
@@ -146,7 +146,7 @@
     <script>
         // --- Globale Variablen und Konfiguration ---
         const OWM_API_KEY = ""; // WICHTIG: Trage hier deinen OpenWeatherMap API Schlüssel ein!
-        const defaultCity = "Dautphetal"; // Standardstadt, falls keine Eingabe erfolgt
+        const defaultCity = "Berlin"; // Standardstadt, falls keine Eingabe erfolgt
 
         // --- DOM Elemente ---
         const clockElement = document.getElementById('clock');
@@ -356,7 +356,7 @@
 
             // Standardstadt beim Laden anzeigen (optional, oder auf Geolocation warten)
             cityInputElement.value = defaultCity;
-            fetchWeather(defaultCity); // Initialer Wetterabruf für Dautphetal
+            fetchWeather(defaultCity); // Initialer Wetterabruf für Berlin
 
             renderTasks(); // To-Do Liste initial laden
             loadNotes(); // Notizen laden
