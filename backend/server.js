@@ -11,7 +11,7 @@ app.use(cors()); // Erlaubt Anfragen vom Frontend (das auf einem anderen Port l�
 app.use(express.json()); // Für das Parsen von JSON-Request-Bodies (brauchen wir hier nicht unbedingt für GET)
 
 // Routen
-app.use('/api/weather', weatherRoutes); // Alle Wetter-Routen unter /api/weather
+app.use('/api/v1/weather', weatherRoutes); // Alle Wetter-Routen unter /api/weather
 
 app.listen(port, () => {
     console.log(`Backend-Server läuft auf http://localhost:${port}`);

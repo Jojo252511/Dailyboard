@@ -1,0 +1,317 @@
+openapi: 3.0.3
+info:
+  title: Mein Digitales Board Backend API
+  version: "1.0.0"
+  description: |-
+    API für das Backend des Projekts "Mein Digitales Board".
+    Aktuell stellt diese API Endpunkte für Wetterinformationen bereit.
+  contact:
+    name: Dein Name / Projektteam
+    url: http://deine-projekt-url.de # Optional
+    email: deine-email@example.com   # Optional
+servers:
+  - url: http://localhost:{port}/api/v1
+    description: Lokaler Entwicklungsserver
+    variables:
+      port:
+        default: '3000' # Der Port, auf dem dein Backend-Server läuft
+        description: Portnummer des Backend-Servers
+
+tags:
+  - name: Weather
+    description: Operationen bezüglich Wetterdaten
+
+paths:
+  /weather/{city}:
+    get:
+      tags:
+        - Weather
+      summary: Ruft aktuelle Wetterdaten für eine angegebene Stadt ab.
+      description: |-
+        Dieser Endpunkt nimmt einen Stadtnamen als Pfadparameter entgegen und liefert
+        detaillierte Wetterinformationen von OpenWeatherMap zurück.
+        Einheiten sind metrisch (Temperatur in Celsius) und die Sprache ist Deutsch.
+      operationId: getWeatherByCity
+      parameters:
+        - name: city
+          in: path
+          required: true
+          description: Der Name der Stadt, für die Wetterdaten abgerufen werden sollen.
+          schema:
+            type: string
+            example: Berlin
+      responses:
+        '200':
+          description: Erfolgreiche Antwort mit den aktuellen Wetterdaten.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherResponse'
+              example:
+                coord: { lon: 13.4105, lat: 52.5244 }
+                weather: [{ id: 800, main: "Clear", description: "Klarer Himmel", icon: "01d" }]
+                main: { temp: 22.5, feels_like: 22.0, temp_min: 20.0, temp_max: 25.0, pressure: 1012, humidity: 45 }
+                visibility: 10000
+                wind: { speed: 3.5, deg: 180 }
+                clouds: { all: 0 }
+                dt: 1672531200 # Beispiel Unix Timestamp
+                sys: { type: 1, id: 1275, country: "DE", sunrise: 1672498800, sunset: 1672534800 }
+                timezone: 3600
+                id: 2950159 # Stadt ID Berlin
+                name: "Berlin"
+                cod: 200
+        '400':
+          description: Ungültige Anfrage. Entweder fehlt der Stadtname oder die Anfrage ist fehlerhaft.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Stadt fehlt in der Anfrage."
+        '401':
+          description: Nicht autorisiert. Dies kann auftreten, wenn der serverseitige OpenWeatherMap API-Schlüssel ungültig ist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Fehler von OpenWeatherMap für Stadt 'UngueltigeStadt'" # Beispiel
+                owmError: { cod: 401, message: "Invalid API key. Please see http://openweathermap.org/faq#error401 for more info." }
+        '404':
+          description: Stadt nicht gefunden. OpenWeatherMap konnte keine Daten für die angegebene Stadt finden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Fehler von OpenWeatherMap für Stadt 'NichtExistierendeStadt'"
+                owmError: { cod: "404", message: "city not found" }
+        '500':
+          description: Interner Serverfehler. Dies kann z.B. passieren, wenn der OpenWeatherMap API-Schlüssel serverseitig nicht konfiguriert ist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "OpenWeatherMap API-Schlüssel ist serverseitig nicht konfiguriert."
+        '503':
+          description: Dienst nicht verfügbar. OpenWeatherMap antwortet nicht oder es gibt ein anderes Verbindungsproblem zum externen Dienst.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Keine Antwort von OpenWeatherMap erhalten."
+
+components:
+  schemas:
+    WeatherResponse:
+      type: object
+      description: Enthält die detaillierten Wetterinformationen.
+      properties:
+        coord:
+          $ref: '#/components/schemas/Coord'
+        weather:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeatherItem'
+        base:
+          type: string
+          description: Interne OpenWeatherMap Basisstation.
+          example: stations
+        main:
+          $ref: '#/components/schemas/MainWeather'
+        visibility:
+          type: integer
+          description: Sichtweite in Metern.
+          example: 10000
+        wind:
+          $ref: '#/components/schemas/Wind'
+        clouds:
+          $ref: '#/components/schemas/Clouds'
+        rain:
+          $ref: '#/components/schemas/Rain'
+          description: Regenvolumen der letzten Stunde. Optional.
+        snow:
+          $ref: '#/components/schemas/Snow'
+          description: Schneevolumen der letzten Stunde. Optional.
+        dt:
+          type: integer
+          format: int64 # Unix Timestamp, Sekunden
+          description: Zeitpunkt der Datenberechnung, Unix, UTC.
+          example: 1672531200
+        sys:
+          $ref: '#/components/schemas/Sys'
+        timezone:
+          type: integer
+          description: Verschiebung in Sekunden von UTC.
+          example: 3600
+        id:
+          type: integer
+          description: Stadt-ID von OpenWeatherMap.
+          example: 2950159
+        name:
+          type: string
+          description: Name der Stadt.
+          example: Berlin
+        cod:
+          type: integer
+          description: Interner Parameter (Antwortcode, z.B. 200 für Erfolg).
+          example: 200
+
+    Coord:
+      type: object
+      properties:
+        lon:
+          type: number
+          format: float
+          description: Longitude (Längengrad).
+          example: 13.4105
+        lat:
+          type: number
+          format: float
+          description: Latitude (Breitengrad).
+          example: 52.5244
+
+    WeatherItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Wetterbedingungs-ID.
+          example: 800
+        main:
+          type: string
+          description: Hauptwetterlage (z.B. Clouds, Clear, Rain).
+          example: Clear
+        description:
+          type: string
+          description: Detailliertere Wetterbeschreibung.
+          example: Klarer Himmel
+        icon:
+          type: string
+          description: Wetter-Icon-ID.
+          example: 01d
+
+    MainWeather:
+      type: object
+      properties:
+        temp:
+          type: number
+          format: float
+          description: Temperatur in Celsius.
+          example: 22.5
+        feels_like:
+          type: number
+          format: float
+          description: Gefühlte Temperatur in Celsius.
+          example: 22.0
+        temp_min:
+          type: number
+          format: float
+          description: Minimale aktuelle Temperatur in Celsius.
+          example: 20.0
+        temp_max:
+          type: number
+          format: float
+          description: Maximale aktuelle Temperatur in Celsius.
+          example: 25.0
+        pressure:
+          type: integer
+          description: Luftdruck in hPa.
+          example: 1012
+        humidity:
+          type: integer
+          description: Luftfeuchtigkeit in Prozent.
+          example: 45
+        sea_level:
+          type: integer
+          description: Luftdruck auf Meereshöhe in hPa (optional).
+          example: 1012
+        grnd_level:
+          type: integer
+          description: Luftdruck auf Bodenhöhe in hPa (optional).
+          example: 950
+
+
+    Wind:
+      type: object
+      properties:
+        speed:
+          type: number
+          format: float
+          description: Windgeschwindigkeit in Meter/Sek.
+          example: 3.5
+        deg:
+          type: integer
+          description: Windrichtung in Grad (meteorologisch).
+          example: 180
+        gust:
+          type: number
+          format: float
+          description: Windböen in Meter/Sek (optional).
+          example: 5.0
+
+    Clouds:
+      type: object
+      properties:
+        all:
+          type: integer
+          description: Bewölkung in Prozent.
+          example: 0
+
+    Rain:
+      type: object
+      description: Regeninformationen. Nur vorhanden, wenn es regnet.
+      properties:
+        "1h": # Schlüssel muss in Anführungszeichen, da er mit einer Zahl beginnt
+          type: number
+          format: float
+          description: Regenvolumen der letzten Stunde in mm.
+
+    Snow:
+      type: object
+      description: Schneeinformationen. Nur vorhanden, wenn es schneit.
+      properties:
+        "1h": # Schlüssel muss in Anführungszeichen
+          type: number
+          format: float
+          description: Schneevolumen der letzten Stunde in mm (entspricht Wassermenge).
+
+    Sys:
+      type: object
+      properties:
+        type:
+          type: integer
+          description: Interner Parameter.
+        id:
+          type: integer
+          description: Interner Parameter.
+        country:
+          type: string
+          description: Ländercode (z.B. DE, US).
+          example: DE
+        sunrise:
+          type: integer
+          format: int64 # Unix Timestamp, Sekunden
+          description: Zeitpunkt des Sonnenaufgangs, Unix, UTC.
+          example: 1672498800
+        sunset:
+          type: integer
+          format: int64 # Unix Timestamp, Sekunden
+          description: Zeitpunkt des Sonnenuntergangs, Unix, UTC.
+          example: 1672534800
+
+    ErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Eine für Menschen lesbare Fehlermeldung.
+        owmError:
+          type: object
+          description: Optionale, detailliertere Fehlerinformationen vom OpenWeatherMap-Dienst.
+          additionalProperties: true # Erlaubt beliebige Felder von OWM
+          example: { cod: "404", message: "city not found" }
