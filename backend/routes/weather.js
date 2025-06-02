@@ -15,7 +15,7 @@ router.get('/:city', async (req, res) => {
     }
 
     try {
-        const url = `<span class="math-inline">\{OWM\_BASE\_URL\}?q\=</span>{city}&appid=${OWM_API_KEY}&units=metric&lang=de`;
+        const url = `${OWM_BASE_URL}?q=${encodeURIComponent(city)}&appid=${OWM_API_KEY}&units=metric`;
         const response = await axios.get(url);
         res.json(response.data);
     } catch (error) {
