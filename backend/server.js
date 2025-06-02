@@ -1,14 +1,18 @@
-require('dotenv').config(); // Lädt Umgebungsvariablen aus .env
+require('dotenv').config();
 const express = require('express');
-const cors = require('cors'); // Für Cross-Origin Resource Sharing
+const cors = require('cors');
 const weatherRoutes = require('./routes/weather');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+/**
+ * Aktuelle API Version: v1
+*/
+
 // Middleware
-app.use(cors()); // Erlaubt Anfragen vom Frontend (das auf einem anderen Port läuft)
-app.use(express.json()); // Für das Parsen von JSON-Request-Bodies (brauchen wir hier nicht unbedingt für GET)
+app.use(cors());
+app.use(express.json());
 
 // Routen
 app.use('/api/v1/weather', weatherRoutes); // Alle Wetter-Routen unter /api/weather
