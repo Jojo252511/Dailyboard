@@ -12,4 +12,7 @@ export default {
     getWeather(city) {
         return apiClient.get(`/weather/${city}`);
     },
+    askAI(question) {
+        return apiClient.post('/ai/ask', { question });
+    }
 };

@@ -7,6 +7,7 @@
       <WeatherWidget />
       <TodoWidget />
       <NotesWidget />
+      <AskAIWidget />
     </div>
   </div>
 </template>
@@ -14,8 +15,9 @@
 <script setup>
 import ClockWidget from './components/ClockWidget.vue';
 import WeatherWidget from './components/WeatherWidget.vue';
-import TodoWidget from './components/TodoWidget.vue'; // Erstellen!
-import NotesWidget from './components/NotesWidget.vue'; // Erstellen!
+import TodoWidget from './components/TodoWidget.vue';
+import NotesWidget from './components/NotesWidget.vue';
+import AskAIWidget from './components/AskAIWidget.vue';
 
 // Stelle sicher, dass die globalen Styles (Tailwind via CDN oder als PostCSS-Plugin)
 // in deiner public/index.html oder über main.js geladen werden.
