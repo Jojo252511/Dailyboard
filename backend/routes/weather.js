@@ -7,7 +7,7 @@ const OWM_BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 router.get('/:city', async (req, res) => {
     const city = req.params.city;
-    if (!OWM_API_KEY) {
+    if (!OWM_API_KEY || OWM_API_KEY === 'DEIN_OPENWEATHERMAP_API_SCHLUESSEL_HIER') {
         return res.status(500).json({ message: "OpenWeatherMap API-Schlüssel ist serverseitig nicht konfiguriert." });
     }
     if (!city) {
