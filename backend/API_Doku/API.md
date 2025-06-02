@@ -6,6 +6,8 @@ Willkommen zur Backend-API für das Projekt "Mein Digitales Board". Diese API di
 
 Die vollständige und detaillierte Spezifikation dieser API finden Sie in der Datei `API.yaml` (OpenAPI 3.0.3).
 
+**Die Aktuelle Version der API ist v1**
+
 ## Basis-URL
 
 Alle API-Endpunkte sind relativ zur folgenden Basis-URL:
