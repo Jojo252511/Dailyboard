@@ -1,22 +1,18 @@
 <template>
     <div class="board-widget">
-        <div class="ask-ai-widget"> <h2 class="widget-title">Frage die KI</h2>
+        <div class="ask-ai-widget">
+            <h2 class="widget-title">Frage die KI</h2>
             <div class="input-group">
-                <input
-                    v-model="question"
-                    @keyup.enter="askAI"
-                    class="input-field"
-                    placeholder="Stelle eine Frage an die KI..."
-                    :disabled="loading"
-                />
-                <button @click="askAI" class="button button-primary" :disabled="loading || !question.trim()">
-                    {{ loading ? 'Denkt nach...' : 'Frage stellen' }}
-                </button>
+                <input v-model="question" @keyup.enter="askAI" class="input-field"
+                    placeholder="Stelle eine Frage an die KI..." :disabled="loading" />
             </div>
+            <button @click="askAI" class="button button-primary" :disabled="loading || !question.trim()">
+                {{ loading ? 'Denkt nach...' : 'Frage stellen' }}
+            </button>
 
             <div v-if="userMessage"
-                 :class="['message-box', messageType === 'error' ? 'message-box-error' : 'message-box-info']"
-                 role="alert">
+                :class="['message-box', messageType === 'error' ? 'message-box-error' : 'message-box-info']"
+                role="alert">
                 {{ userMessage }}
             </div>
 
@@ -103,27 +99,37 @@ async function askAI() {
 
 .input-group {
     display: flex;
-    flex-direction: column; /* Standardmäßig untereinander für kleinere Bildschirme */
-    gap: 0.75rem; /* Abstand zwischen Input und Button */
+    flex-direction: column;
+    /* Standardmäßig untereinander für kleinere Bildschirme */
+    gap: 0.75rem;
+    /* Abstand zwischen Input und Button */
     margin-bottom: 1rem;
 }
 
 .input-group .input-field {
-    margin-bottom: 0; /* Entferne Standard-Margin, da 'gap' verwendet wird */
+    margin-bottom: 0;
+    /* Entferne Standard-Margin, da 'gap' verwendet wird */
 }
 
 /* Für größere Bildschirme nebeneinander */
-@media (min-width: 640px) { /* sm breakpoint von Tailwind als Beispiel */
+@media (min-width: 640px) {
+
+    /* sm breakpoint von Tailwind als Beispiel */
     .input-group {
         flex-direction: row;
         align-items: center;
     }
+
     .input-group .input-field {
-        flex-grow: 1; /* Input-Feld nimmt verfügbaren Platz ein */
+        flex-grow: 1;
+        /* Input-Feld nimmt verfügbaren Platz ein */
     }
+
     .input-group .button {
-        width: auto; /* Buttonbreite an Inhalt anpassen */
-        flex-shrink: 0; /* Verhindert, dass der Button schrumpft */
+        width: auto;
+        /* Buttonbreite an Inhalt anpassen */
+        flex-shrink: 0;
+        /* Verhindert, dass der Button schrumpft */
     }
 }
 
@@ -131,28 +137,36 @@ async function askAI() {
 .answer-box {
     margin-top: 1rem;
     padding: 1rem;
-    background-color: #f9fafb; /* Tailwind bg-gray-50 */
-    border-radius: 0.375rem;   /* Tailwind rounded-md */
-    border: 1px solid #e5e7eb; /* Tailwind border-gray-200 */
+    background-color: #f9fafb;
+    /* Tailwind bg-gray-50 */
+    border-radius: 0.375rem;
+    /* Tailwind rounded-md */
+    border: 1px solid #e5e7eb;
+    /* Tailwind border-gray-200 */
 }
 
 .answer-title {
-    font-weight: 600; /* semibold */
-    color: #374151; /* Tailwind text-gray-700 */
+    font-weight: 600;
+    /* semibold */
+    color: #374151;
+    /* Tailwind text-gray-700 */
     margin-top: 0;
     margin-bottom: 0.5rem;
 }
 
 .answer-text {
-    color: #1f2937; /* Tailwind text-gray-800 */
-    white-space: pre-wrap; /* Erhält Zeilenumbrüche und Leerzeichen, bricht aber auch um */
+    color: #1f2937;
+    /* Tailwind text-gray-800 */
+    white-space: pre-wrap;
+    /* Erhält Zeilenumbrüche und Leerzeichen, bricht aber auch um */
     font-size: 0.95rem;
     line-height: 1.6;
 }
 
 .placeholder-text {
     text-align: center;
-    color: #6b7280; /* Tailwind text-gray-500 */
+    color: #6b7280;
+    /* Tailwind text-gray-500 */
     margin-top: 1rem;
     padding: 0.5rem;
     font-style: italic;
