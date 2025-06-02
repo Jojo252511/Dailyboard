@@ -15,32 +15,32 @@ VITE_API_BASE_URL=http://localhost:3000/api
 ```
 
 /dailyboard
-├── backend/                  # Node.js/Express Backend  
+├── backend/                    
 │   ├── node_modules/  
 │   ├── routes/  
-│   │   └── weather.js        # Routen-Logik für das Wetter  
-│   ├── .env                  # Hier kommt dein API-Schlüssel rein  
-│   ├── .gitignore            # Ignoriert node_modules, .env etc.  
+│   │   └── weather.js          
+│   ├── .env                    
+│   ├── .gitignore              
 │   ├── package.json  
-│   └── server.js             # Hauptdatei für den Express-Server  
+│   └── server.js               
 │
-└── frontend/                 # Vue.js Frontend  
+└── frontend/                  
     ├── node_modules/  
     ├── public/  
     │   └── index.html  
     ├── src/  
-    │   ├── assets/             # Statische Assets wie Logos (optional)  
-    │   ├── components/         # Vue-Komponenten  
+    │   ├── assets/               
+    │   ├── components/           
     │   │   ├── ClockWidget.vue  
     │   │   ├── WeatherWidget.vue  
     │   │   ├── TodoWidget.vue  
     │   │   └── NotesWidget.vue  
     │   ├── services/  
-    │   │   └── ApiService.js   # Service für Backend-API-Aufrufe  
-    │   ├── App.vue             # Haupt-Vue-Komponente  
-    │   └── main.js             # Vue Initialisierungsdatei  
-    ├── .env.local            # Für Frontend-spezifische Umgebungsvariablen (z.B. API-Basis-URL)  
+    │   │   └── ApiService.js     
+    │   ├── App.vue                
+    │   └── main.js               
+    ├── .env.local              
     ├── .gitignore  
     ├── package.json  
-    └── vite.config.js        # (wenn du Vite für dein Vue-Projekt verwendest)
-    # oder vue.config.js      # (wenn du Vue CLI verwendest)  
+    └── vite.config.js        
+  
