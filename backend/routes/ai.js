@@ -20,22 +20,28 @@ router.post('/ask', async (req, res) => {
 
     try {
         const requestBody = {
-            contents: [{
-                parts: [{
-                    text: question
-                }]
-            }],
-            // Optional: Konfiguration für die Generierung, falls benötigt
-            // generationConfig: {
-            //   temperature: 0.7,
-            //   topK: 1,
-            //   topP: 1,
-            //   maxOutputTokens: 2048,
-            // },
-            // safetySettings: [ // Standard Safety Settings sind meist gut
-            //   { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-            //   // ... weitere Einstellungen
-            // ]
+            contents: [
+                {
+                    parts: [
+                        {
+                            text: question
+                        }
+                    ]
+                }
+            ], 
+            generationConfig:
+            {
+                temperature: 0.7,
+                topK: 1,
+                topP: 1,
+                maxOutputTokens: 2048,
+            },
+            safetySettings: [
+                {
+                    category: 'HARM_CATEGORY_HARASSMENT',
+                    threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+                }
+            ]
         };
 
         const url = `${GEMINI_BASE_URL}?key=${GEMINI_API_KEY}`;
@@ -56,14 +62,14 @@ router.post('/ask', async (req, res) => {
             } else if (candidate.finishReason && candidate.finishReason !== "STOP") {
                 // Wenn die Generierung aus anderen Gründen als "STOP" beendet wurde (z.B. SAFETY)
                 aiAnswer = `Die Antwort konnte nicht generiert werden (Grund: ${candidate.finishReason}).`;
-                 if (candidate.safetyRatings) {
+                if (candidate.safetyRatings) {
                     console.warn("Safety Ratings:", candidate.safetyRatings);
-                 }
+                }
             }
         } else if (geminiResponse.data.promptFeedback) {
-             // Falls die Eingabe direkt blockiert wurde (z.B. promptFeedback.blockReason)
-             aiAnswer = `Die Anfrage wurde blockiert (Grund: ${geminiResponse.data.promptFeedback.blockReason}).`;
-             console.warn("Prompt Feedback:", geminiResponse.data.promptFeedback);
+            // Falls die Eingabe direkt blockiert wurde (z.B. promptFeedback.blockReason)
+            aiAnswer = `Die Anfrage wurde blockiert (Grund: ${geminiResponse.data.promptFeedback.blockReason}).`;
+            console.warn("Prompt Feedback:", geminiResponse.data.promptFeedback);
         }
 
         res.json({ answer: aiAnswer });

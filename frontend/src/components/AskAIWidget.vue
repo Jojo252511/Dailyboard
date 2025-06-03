@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import ApiService from '@/services/ApiService'; // Pfad ggf. anpassen
+import ApiService from '@/services/ApiService';
 
 // --- Reaktive Variablen ---
 const question = ref('');
