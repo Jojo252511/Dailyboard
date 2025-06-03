@@ -39,7 +39,7 @@ onMounted(() => {
 
 <style scoped>
 .notes-textarea {
-    min-height: 8rem; /* 128px, Tailwind h-32 */
+    min-height: 16rem;
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 0.75rem;
