@@ -171,4 +171,13 @@ async function askAI() {
     padding: 0.5rem;
     font-style: italic;
 }
+
+.message-box {
+    padding: 1rem;
+    border-radius: 0.375rem; /* rounded-md */
+    margin-top: 15px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem; /* text-sm */
+    border: 1px solid transparent;
+}
 </style>
