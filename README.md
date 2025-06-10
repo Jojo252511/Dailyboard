@@ -47,3 +47,6 @@ VITE_API_BASE_URL=http://localhost:3000/api/v1
     ├── package.json  
     └── vite.config.js        
   
+  ---
+
+  Gemini (Google): https://developers.google.com/terms
